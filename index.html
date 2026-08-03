@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel Admin - Login</title>
+    <title>Painel Admin Executável</title>
     <style>
-        /* Estilização moderna e escura para o menu */
+        /* Estilização Geral Escura */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #121212;
@@ -16,6 +16,8 @@
             height: 100vh;
             margin: 0;
         }
+        
+        /* 1. ESTILO DA TELA DE LOGIN */
         .login-container {
             background-color: #1e1e1e;
             padding: 30px;
@@ -24,69 +26,75 @@
             width: 320px;
             text-align: center;
         }
-        h2 {
-            margin-bottom: 24px;
-            color: #bb86fc;
-        }
-        .input-group {
-            margin-bottom: 16px;
-            text-align: left;
-        }
-        label {
-            display: block;
-            margin-bottom: 6px;
-            font-size: 14px;
-            color: #b3b3b3;
-        }
+        h2 { margin-bottom: 24px; color: #bb86fc; }
+        .input-group { margin-bottom: 16px; text-align: left; }
+        label { display: block; margin-bottom: 6px; font-size: 14px; color: #b3b3b3; }
         input {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #333;
-            border-radius: 6px;
+            width: 100%; padding: 10px; border: 1px solid #333; border-radius: 6px;
+            background-color: #2d2d2d; color: #ffffff; font-size: 16px; box-sizing: border-box;
+        }
+        input:focus { outline: none; border-color: #bb86fc; }
+        button {
+            width: 100%; padding: 12px; background-color: #bb86fc; border: none;
+            border-radius: 6px; color: #121212; font-size: 16px; font-weight: bold;
+            cursor: pointer; margin-top: 10px; transition: background 0.2s;
+        }
+        button:hover { background-color: #9965db; }
+        #error-msg { color: #cf6679; font-size: 14px; margin-top: 14px; display: none; }
+
+        /* 2. ESTILO DO PAINEL DE ADMIN (INICIALMENTE INVISÍVEL) */
+        .admin-panel {
+            display: none; /* Esconde o painel até o login estar correto */
+            background-color: #1e1e1e;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0px 8px 25px rgba(187, 134, 252, 0.2);
+            width: 450px;
+            text-align: center;
+        }
+        .admin-panel h1 { color: #03dac6; margin-bottom: 10px; }
+        .grid-botoes {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 20px;
+        }
+        .btn-comando {
             background-color: #2d2d2d;
             color: #ffffff;
-            font-size: 16px;
-            box-sizing: border-box;
-        }
-        input:focus {
-            outline: none;
-            border-color: #bb86fc;
-        }
-        button {
-            width: 100%;
-            padding: 12px;
-            background-color: #bb86fc;
-            border: none;
-            border-radius: 6px;
-            color: #121212;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            margin-top: 10px;
-            transition: background 0.2s;
-        }
-        button:hover {
-            background-color: #9965db;
-        }
-        #error-msg {
-            color: #cf6679;
+            border: 1px solid #444;
+            padding: 14px;
             font-size: 14px;
-            margin-top: 14px;
-            display: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
         }
+        .btn-comando:hover {
+            background-color: #03dac6;
+            color: #121212;
+            font-weight: bold;
+            transform: translateY(-2px);
+        }
+        .btn-sair {
+            background-color: #cf6679;
+            color: #ffffff;
+            margin-top: 20px;
+        }
+        .btn-sair:hover { background-color: #b04356; color: #fff; }
     </style>
 </head>
 <body>
 
-    <div class="login-container">
+    <!-- CONTAINER 1: TELA DE LOGIN -->
+    <div class="login-container" id="telaLogin">
         <h2>Acesso Admin</h2>
-        <form id="loginForm" onsubmit="validarAcesso(event)">
+        <form onsubmit="validarAcesso(event)">
             <div class="input-group">
-                <label for="username">Usuário</label>
+                <label>Usuário</label>
                 <input type="text" id="username" placeholder="Digite seu usuário" required>
             </div>
             <div class="input-group">
-                <label for="password">Senha</label>
+                <label>Senha</label>
                 <input type="password" id="password" placeholder="Digite sua senha" required>
             </div>
             <button type="submit">Entrar no Painel</button>
@@ -94,36 +102,58 @@
         </form>
     </div>
 
+    <!-- CONTAINER 2: O PAINEL DE ADMIN VERDADEIRO -->
+    <div class="admin-panel" id="painelAdmin">
+        <h1>Painel de Controle</h1>
+        <p>Bem-vindo de volta, <strong>broto</strong>! Escolha um comando para executar:</p>
+        
+        <div class="grid-botoes">
+            <button class="btn-comando" onclick="executarComando('Super Velocidade')">⚡ Super Velocidade</button>
+            <button class="btn-comando" onclick="executarComando('Pulo Infinito')">🦘 Pulo Alto</button>
+            <button class="btn-comando" onclick="executarComando('Modo Deus')">🛡️ Modo Deus (Invisível)</button>
+            <button class="btn-comando" onclick="executarComando('Dar 10.000 Moedas')">💰 Injetar 10.000 Moedas</button>
+        </div>
+
+        <button class="btn-comando btn-sair" onclick="fazerLogout()">🔒 Fechar Painel</button>
+    </div>
+
     <script>
-        // CREDENCIAIS DEFINIDAS POR VOCÊ
+        // CONFIGURAÇÕES DA SUA CONTA
         const USUARIO_CORRETO = "broto";
         const SENHA_CORRETA = "adminnnn";
 
         function validarAcesso(event) {
-            event.preventDefault(); // Impede a página de recarregar
+            event.preventDefault();
 
-            // Captura os elementos digitados na tela
             const usuarioDigitado = document.getElementById("username").value;
             const senhaDigitada = document.getElementById("password").value;
             const msgErro = document.getElementById("error-msg");
 
-            // Validação lógica do sistema
             if (usuarioDigitado === USUARIO_CORRETO && senhaDigitada === SENHA_CORRETA) {
-                msgErro.style.color = "#03dac6";
-                msgErro.style.display = "block";
-                msgErro.text = "Acesso permitido! Redirecionando...";
-                
-                // Define para onde o usuário vai ao acertar (ex: sua página de scripts)
-                setTimeout(() => {
-                    window.location.href = "https://roblox.com"; 
-                }, 1000);
+                // SUCESSO: Esconde a tela de login e exibe o painel de admin
+                document.getElementById("telaLogin").style.display = "none";
+                document.getElementById("painelAdmin").style.display = "block";
             } else {
-                // Se errar, limpa a senha e exibe o alerta na tela
+                // ERRO: Alerta o usuário inválido
                 document.getElementById("password").value = "";
-                msgErro.style.color = "#cf6679";
                 msgErro.style.display = "block";
                 msgErro.innerText = "Usuário ou Senha incorretos!";
             }
+        }
+
+        // LÓGICA DOS BOTÕES DO SEU MENU
+        function executarComando(nomeComando) {
+            alert("Comando Enviado: " + nomeComando + " ativado com sucesso!");
+        }
+
+        // FUNÇÃO PARA SAIR DO MENU
+        function fazerLogout() {
+            // Limpa os campos e faz o painel sumir voltando para o login
+            document.getElementById("username").value = "";
+            document.getElementById("password").value = "";
+            document.getElementById("error-msg").style.display = "none";
+            document.getElementById("painelAdmin").style.display = "none";
+            document.getElementById("telaLogin").style.display = "block";
         }
     </script>
 
