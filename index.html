@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel Admin - Login</title>
+    <style>
+        /* Estilização moderna e escura para o menu */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #121212;
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .login-container {
+            background-color: #1e1e1e;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.5);
+            width: 320px;
+            text-align: center;
+        }
+        h2 {
+            margin-bottom: 24px;
+            color: #bb86fc;
+        }
+        .input-group {
+            margin-bottom: 16px;
+            text-align: left;
+        }
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 14px;
+            color: #b3b3b3;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #333;
+            border-radius: 6px;
+            background-color: #2d2d2d;
+            color: #ffffff;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        input:focus {
+            outline: none;
+            border-color: #bb86fc;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #bb86fc;
+            border: none;
+            border-radius: 6px;
+            color: #121212;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background 0.2s;
+        }
+        button:hover {
+            background-color: #9965db;
+        }
+        #error-msg {
+            color: #cf6679;
+            font-size: 14px;
+            margin-top: 14px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-container">
+        <h2>Acesso Admin</h2>
+        <form id="loginForm" onsubmit="validarAcesso(event)">
+            <div class="input-group">
+                <label for="username">Usuário</label>
+                <input type="text" id="username" placeholder="Digite seu usuário" required>
+            </div>
+            <div class="input-group">
+                <label for="password">Senha</label>
+                <input type="password" id="password" placeholder="Digite sua senha" required>
+            </div>
+            <button type="submit">Entrar no Painel</button>
+            <p id="error-msg"></p>
+        </form>
+    </div>
+
+    <script>
+        // CREDENCIAIS DEFINIDAS POR VOCÊ
+        const USUARIO_CORRETO = "broto";
+        const SENHA_CORRETA = "adminnnn";
+
+        function validarAcesso(event) {
+            event.preventDefault(); // Impede a página de recarregar
+
+            // Captura os elementos digitados na tela
+            const usuarioDigitado = document.getElementById("username").value;
+            const senhaDigitada = document.getElementById("password").value;
+            const msgErro = document.getElementById("error-msg");
+
+            // Validação lógica do sistema
+            if (usuarioDigitado === USUARIO_CORRETO && senhaDigitada === SENHA_CORRETA) {
+                msgErro.style.color = "#03dac6";
+                msgErro.style.display = "block";
+                msgErro.text = "Acesso permitido! Redirecionando...";
+                
+                // Define para onde o usuário vai ao acertar (ex: sua página de scripts)
+                setTimeout(() => {
+                    window.location.href = "https://roblox.com"; 
+                }, 1000);
+            } else {
+                // Se errar, limpa a senha e exibe o alerta na tela
+                document.getElementById("password").value = "";
+                msgErro.style.color = "#cf6679";
+                msgErro.style.display = "block";
+                msgErro.innerText = "Usuário ou Senha incorretos!";
+            }
+        }
+    </script>
+
+</body>
+</html>
