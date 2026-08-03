@@ -3,208 +3,131 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel de Controle - Níveis de Acesso</title>
+    <title>Gerador de Keys para Admins</title>
     <style>
-        /* Estilização Geral Escura */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #121212;
-            color: #ffffff;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
+            background-color: #121212; color: #ffffff;
+            display: flex; justify-content: center; align-items: center;
+            height: 100vh; margin: 0;
         }
-        
-        /* 1. TELA DE LOGIN */
-        .login-container {
-            background-color: #1e1e1e;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.5);
-            width: 320px;
-            text-align: center;
+        .container {
+            background-color: #1e1e1e; padding: 30px;
+            border-radius: 12px; box-shadow: 0px 8px 20px rgba(0,0,0,0.5);
+            width: 380px; text-align: center;
         }
-        h2 { margin-bottom: 24px; color: #bb86fc; }
-        .input-group { margin-bottom: 16px; text-align: left; }
-        label { display: block; margin-bottom: 6px; font-size: 14px; color: #b3b3b3; }
+        h2, h3 { color: #03dac6; margin-bottom: 20px; }
         input {
-            width: 100%; padding: 10px; border: 1px solid #333; border-radius: 6px;
-            background-color: #2d2d2d; color: #ffffff; font-size: 16px; box-sizing: border-box;
+            width: 100%; padding: 10px; margin-bottom: 15px;
+            border: 1px solid #333; border-radius: 6px;
+            background-color: #2d2d2d; color: #fff; box-sizing: border-box;
         }
-        input:focus { outline: none; border-color: #bb86fc; }
         button {
-            width: 100%; padding: 12px; background-color: #bb86fc; border: none;
-            border-radius: 6px; color: #121212; font-size: 16px; font-weight: bold;
-            cursor: pointer; margin-top: 10px; transition: background 0.2s;
+            width: 100%; padding: 12px; background-color: #03dac6;
+            border: none; border-radius: 6px; color: #121212;
+            font-size: 16px; font-weight: bold; cursor: pointer;
         }
-        button:hover { background-color: #9965db; }
-        #error-msg { color: #cf6679; font-size: 14px; margin-top: 14px; display: none; }
-
-        /* 2. PAINÉIS DE RESPOSTA (INICIALMENTE INVISÍVEIS) */
-        .panel {
-            display: none;
-            background-color: #1e1e1e;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0px 8px 25px rgba(0, 0, 0, 0.5);
-            width: 450px;
-            text-align: center;
-        }
-        .panel h1 { margin-bottom: 10px; }
+        button:hover { background-color: #01bca7; }
+        #error-msg { color: #cf6679; font-size: 14px; display: none; }
         
-        /* Destaques visuais para cada nível */
-        .admin-theme { border: 2px solid #03dac6; }
-        .member-theme { border: 2px solid #3700b3; }
-        
-        /* Área do Gerador de Key */
+        .admin-panel { display: none; }
         .key-box {
-            background-color: #2d2d2d;
-            border: 1px dashed #bb86fc;
-            padding: 20px;
-            border-radius: 8px;
-            margin-top: 20px;
+            background-color: #2d2d2d; border: 1px dashed #03dac6;
+            padding: 15px; border-radius: 8px; margin-top: 15px;
         }
         .key-display {
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 20px;
-            color: #03dac6;
-            font-weight: bold;
-            background-color: #121212;
-            padding: 10px;
-            border-radius: 6px;
-            margin: 15px 0;
-            word-break: break-all;
+            font-family: monospace; font-size: 18px; color: #bb86fc;
+            background-color: #121212; padding: 10px; border-radius: 6px;
+            margin: 10px 0; word-break: break-all;
         }
-        .btn-gerar { background-color: #03dac6; color: #121212; }
-        .btn-gerar:hover { background-color: #01bca7; }
-        
-        .btn-sair {
-            background-color: #cf6679; color: #ffffff; margin-top: 20px;
-            width: 100%; padding: 10px; border: none; border-radius: 6px;
-            cursor: pointer; font-weight: bold;
+        .lista-keys {
+            text-align: left; max-height: 120px; overflow-y: auto;
+            background: #121212; padding: 10px; border-radius: 6px; margin-top: 10px;
+            font-size: 12px; color: #b3b3b3;
         }
-        .btn-sair:hover { background-color: #b04356; }
     </style>
 </head>
 <body>
 
-    <!-- 🔐 COMPONENTE 1: TELA DE LOGIN UNIFICADA -->
-    <div class="login-container" id="telaLogin">
-        <h2>Painel de Autenticação</h2>
-        <form onsubmit="validarLogin(event)">
-            <div class="input-group">
-                <label>Usuário</label>
-                <input type="text" id="username" placeholder="Digite seu usuário" required>
-            </div>
-            <div class="input-group">
-                <label>Senha</label>
-                <input type="password" id="password" placeholder="Digite sua senha" required>
-            </div>
-            <button type="submit">Autenticar Conta</button>
+    <!-- TELA DE LOGIN DO ADMIN -->
+    <div class="container" id="telaLogin">
+        <h2>Painel Admin Authenticator</h2>
+        <form onsubmit="validarAdmin(event)">
+            <input type="text" id="username" placeholder="Usuário Admin" required>
+            <input type="password" id="password" placeholder="Senha" required>
+            <button type="submit">Acessar Gerador</button>
             <p id="error-msg"></p>
         </form>
     </div>
 
-    <!-- 🛠️ COMPONENTE 2: PAINEL EXCLUSIVO DO ADMINISTRADOR (LIBERA O GERADOR) -->
-    <div class="panel admin-theme" id="painelAdmin">
-        <h1 style="color: #03dac6;">Console de Administrador</h1>
-        <p>Acesso total concedido à conta: <strong id="nomeAdmin"></strong></p>
+    <!-- PAINEL DE GERAÇÃO EXCLUSIVO -->
+    <div class="container admin-panel" id="painelAdmin">
+        <h3>🔑 Gerador de Keys Ativo</h3>
+        <p>Logado como: <strong>broto</strong></p>
         
         <div class="key-box">
-            <h3>🔑 Gerador de Chaves Ativo</h3>
-            <p style="font-size: 14px; color: #b3b3b3;">Gere, copie e controle chaves de acesso válidas por 24 horas.</p>
-            <div class="key-display" id="keyResult">NENHUMA KEY GERADA</div>
-            <button class="btn-gerar" id="btnAcaoKey" onclick="gerarNovaKey()">Criar Código Delta</button>
+            <div class="key-display" id="keyResult">NENHUMA KEY ATIVA</div>
+            <button onclick="gerarChaveMestra()">Criar Nova Key</button>
         </div>
 
-        <button class="btn-sair" onclick="fazerLogout('painelAdmin')">Sair do Painel</button>
-    </div>
+        <p style="margin-top: 15px; font-size: 14px; text-align: left; color: #b3b3b3;">Chaves Ativas no Sistema:</p>
+        <div class="lista-keys" id="listaKeysContainer">Nenhuma chave gerada no banco de dados local.</div>
 
-    <!-- 👥 COMPONENTE 3: TELA DE USUÁRIO COMUM (SEM ACESSO AO GERADOR) -->
-    <div class="panel member-theme" id="painelMembro">
-        <h1 style="color: #bb86fc;">Área do Jogador</h1>
-        <p>Bem-vindo, <strong id="nomeMembro"></strong>!</p>
-        <p style="color: #b3b3b3; margin-top: 20px;">Você está logado como <strong>Membro Padrão</strong>.</p>
-        <p style="color: #cf6679; font-size: 14px; background-color: #2d2d2d; padding: 15px; border-radius: 6px;">
-            ⚠️ Erro: Sua conta não possui cargo de Administrador. O módulo do Gerador de Chaves foi bloqueado neste dispositivo.
-        </p>
-        <button class="btn-sair" onclick="fazerLogout('painelMembro')">Desconectar Conta</button>
+        <button style="background-color: #cf6679; color: white; margin-top: 15px; padding: 8px;" onclick="fazerLogout()">Desconectar</button>
     </div>
 
     <script>
-        // BANCO DE DADOS DE USUÁRIOS LOCAL
-        const BANCO_USUARIOS = {
-            "broto": { senha: "adminnnn", cargo: "admin" },
-            "membro": { senha: "12345", cargo: "membro" }
-        };
+        const ADMIN_USER = "broto";
+        const ADMIN_PASS = "adminnnn";
 
-        function validarLogin(event) {
+        // Carrega chaves salvas ao abrir a página
+        let bancoDeKeys = JSON.parse(localStorage.getItem("banco_keys")) || [];
+
+        function validarAdmin(event) {
             event.preventDefault();
+            const user = document.getElementById("username").value;
+            const pass = document.getElementById("password").value;
+            const msg = document.getElementById("error-msg");
 
-            const usuarioInput = document.getElementById("username").value.trim().toLowerCase();
-            const senhaInput = document.getElementById("password").value;
-            const msgErro = document.getElementById("error-msg");
-
-            // Verifica se o usuário existe no nosso banco de dados
-            const contaEncontrada = BANCO_USUARIOS[usuarioInput];
-
-            if (contaEncontrada && contaEncontrada.senha === senhaInput) {
-                // Sucesso: Esconde a tela de login inicial
+            if (user === ADMIN_USER && pass === ADMIN_PASS) {
                 document.getElementById("telaLogin").style.display = "none";
-                msgErro.style.display = "none";
-
-                // Direciona com base no privilégio do cargo
-                if (contaEncontrada.cargo === "admin") {
-                    document.getElementById("nomeAdmin").innerText = usuarioInput;
-                    document.getElementById("painelAdmin").style.display = "block";
-                } else {
-                    document.getElementById("nomeMembro").innerText = usuarioInput;
-                    document.getElementById("painelMembro").style.display = "block";
-                }
+                document.getElementById("painelAdmin").style.display = "block";
+                atualizarListaVisual();
             } else {
-                // Falha na autenticação
-                document.getElementById("password").value = "";
-                msgErro.style.display = "block";
-                msgErro.innerText = "Credenciais inválidas ou conta inexistente!";
+                msg.style.display = "block";
+                msg.innerText = "Acesso negado! Apenas Administradores.";
             }
         }
 
-        // LÓGICA DO GERADOR DE CHAVES (APENAS PARA O PAINEL ADMIN)
-        function gerarNovaKey() {
+        function gerarChaveMestra() {
             const caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-            let keyGerada = 'DELTA_';
-            for (let i = 0; i < 12; i++) {
-                keyGerada += caracteres.charAt(Math.floor(Math.random() * caracteres.length));
+            let novaKey = 'KEY_';
+            for (let i = 0; i < 10; i++) {
+                novaKey += caracteres.charAt(Math.floor(Math.random() * caracteres.length));
             }
-            document.getElementById("keyResult").innerText = keyGerada;
 
-            const botao = document.getElementById("btnAcaoKey");
-            botao.innerText = "📋 Copiar Código";
-            botao.setAttribute("onclick", "copiarChave()");
-            botao.style.backgroundColor = "#bb86fc";
+            document.getElementById("keyResult").innerText = novaKey;
+            
+            // Adiciona ao banco de dados local do navegador
+            bancoDeKeys.push(novaKey);
+            localStorage.setItem("banco_keys", JSON.stringify(bancoDeKeys));
+            atualizarListaVisual();
         }
 
-        function copiarChave() {
-            const textoKey = document.getElementById("keyResult").innerText;
-            navigator.clipboard.writeText(textoKey).then(() => {
-                alert("Chave copiada com sucesso!");
-                const botao = document.getElementById("btnAcaoKey");
-                botao.innerText = "Criar Código Delta";
-                botao.setAttribute("onclick", "gerarNovaKey()");
-                botao.style.backgroundColor = "#03dac6";
-            });
+        function atualizarListaVisual() {
+            const container = document.getElementById("listaKeysContainer");
+            if (bancoDeKeys.length === 0) {
+                container.innerText = "Nenhuma chave ativa.";
+                return;
+            }
+            container.innerHTML = bancoDeKeys.map(k => `• ${k}<br>`).join('');
         }
 
-        function fazerLogout(idPainelAtivo) {
-            document.getElementById("username").value = "";
-            document.getElementById("password").value = "";
-            document.getElementById("keyResult").innerText = "NENHUMA KEY GERADA";
-            document.getElementById(idPainelAtivo).style.display = "none";
+        function fazerLogout() {
+            document.getElementById("painelAdmin").style.display = "none";
             document.getElementById("telaLogin").style.display = "block";
+            document.getElementById("password").value = "";
         }
     </script>
-
 </body>
 </html>
